@@ -1,0 +1,20 @@
+diff --git a/node_modules/@moodlehq/cordova-plugin-qrscanner/src/ios/QRScanner.swift b/node_modules/@moodlehq/cordova-plugin-qrscanner/src/ios/QRScanner.swift
+index c4033c8..965c458 100644
+--- a/node_modules/@moodlehq/cordova-plugin-qrscanner/src/ios/QRScanner.swift
++++ b/node_modules/@moodlehq/cordova-plugin-qrscanner/src/ios/QRScanner.swift
+@@ -238,10 +238,12 @@ class QRScanner : CDVPlugin, AVCaptureMetadataOutputObjectsDelegate {
+             return
+         }
+         let found = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
+-        if found.type == AVMetadataObject.ObjectType.qr && found.stringValue != nil {
++        if found.type == AVMetadataObject.ObjectType.qr,
++            let value = found.stringValue,
++            let scanCommand = nextScanningCommand {
+             scanning = false
+-            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: found.stringValue)
+-            commandDelegate!.send(pluginResult, callbackId: nextScanningCommand?.callbackId!)
++            let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: value)
++            commandDelegate!.send(pluginResult, callbackId: scanCommand.callbackId)
+             nextScanningCommand = nil
+         }
+     }

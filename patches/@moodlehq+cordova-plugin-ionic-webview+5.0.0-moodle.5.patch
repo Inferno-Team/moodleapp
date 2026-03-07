@@ -1,8 +1,8 @@
 diff --git a/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m b/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m
-index d5a64dcb4..68eaaf636 100644
+index f46cc80..d5f3b25 100644
 --- a/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m
 +++ b/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m
-@@ -440,6 +440,15 @@ - (BOOL)shouldReloadWebView:(NSURL *)location title:(NSString*)title
+@@ -440,14 +440,25 @@ - (BOOL)shouldReloadWebView:(NSURL *)location title:(NSString*)title
      return reload;
  }
  
@@ -16,10 +16,9 @@ index d5a64dcb4..68eaaf636 100644
 +    return [NSURL URLWithString:startURL];
 +}
 +
- 
++
  - (id)loadRequest:(NSURLRequest *)request
  {
-@@ -447,9 +456,9 @@ - (id)loadRequest:(NSURLRequest *)request
      if (request.URL.fileURL) {
          NSURL* startURL = [NSURL URLWithString:((CDVViewController *)self.viewController).startPage];
          NSString* startFilePath = [self.commandDelegate pathForResource:[startURL path]];
@@ -31,7 +30,60 @@ index d5a64dcb4..68eaaf636 100644
          }
          if(request.URL.query) {
              url = [NSURL URLWithString:[@"?" stringByAppendingString:request.URL.query] relativeToURL:url];
-@@ -809,7 +818,7 @@ -(void)setServerBasePath:(CDVInvokedUrlCommand*)command
+@@ -741,6 +752,27 @@ - (void) webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigat
+ {
+     NSURL* url = [navigationAction.request URL];
+     CDVViewController* vc = (CDVViewController*)self.viewController;
++    int navType = (int)navigationAction.navigationType;
++#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140500
++    NSDictionary *info = @{};
++#endif
++
++    // https://issues.apache.org/jira/browse/CB-12497
++    if (WKNavigationTypeOther == navigationAction.navigationType) {
++        #ifdef __CORDOVA_6_0_0
++            navType = -1;
++        #else
++            navType = 5;
++        #endif
++    }
++
++#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140500
++    if (@available(iOS 14.5, *)) {
++        info = @{
++            @"shouldPerformDownload": @(navigationAction.shouldPerformDownload),
++        };
++    }
++#endif
+ 
+     /*
+      * Give plugins the chance to handle the url
+@@ -749,9 +781,22 @@ - (void) webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigat
+     BOOL shouldAllowRequest = NO;
+ 
+     for (CDVPlugin *plugin in vc.enumerablePlugins) {
+-        if ([plugin respondsToSelector:@selector(shouldOverrideLoadWithRequest:navigationType:)]) {
++        if ([plugin respondsToSelector:@selector(shouldOverrideLoadWithRequest:navigationType:info:)] ||
++                [plugin respondsToSelector:@selector(shouldOverrideLoadWithRequest:navigationType:)]) {
+             anyPluginsResponded = YES;
+-            shouldAllowRequest = [plugin shouldOverrideLoadWithRequest:navigationAction.request navigationType:(int)navigationAction.navigationType];
++
++            if ([plugin respondsToSelector:@selector(shouldOverrideLoadWithRequest:navigationType:info:)]) {
++                CDVPlugin<CDVPluginNavigationHandler> *navPlugin = (CDVPlugin<CDVPluginNavigationHandler> *)plugin;
++                shouldAllowRequest = [navPlugin shouldOverrideLoadWithRequest:navigationAction.request
++                    navigationType:navType
++                    info:info];
++            } else {
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wdeprecated-declarations"
++                SEL selector = NSSelectorFromString(@"shouldOverrideLoadWithRequest:navigationType:");
++                shouldAllowRequest = (((BOOL (*)(id, SEL, id, int))objc_msgSend)(plugin, selector, navigationAction.request, navType));
++#pragma clang diagnostic pop
++            }
+ 
+             if (!shouldAllowRequest) {
+                 break;
+@@ -797,7 +842,7 @@ -(void)setServerBasePath:(CDVInvokedUrlCommand*)command
      self.basePath = path;
      [self.handler setAssetPath:path];
  

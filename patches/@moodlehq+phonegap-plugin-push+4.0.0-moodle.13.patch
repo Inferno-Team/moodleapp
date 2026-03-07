@@ -1,0 +1,21 @@
+diff --git a/node_modules/@moodlehq/phonegap-plugin-push/src/ios/EncryptionHandler.m b/node_modules/@moodlehq/phonegap-plugin-push/src/ios/EncryptionHandler.m
+index 1ee2277..2815b36 100644
+--- a/node_modules/@moodlehq/phonegap-plugin-push/src/ios/EncryptionHandler.m
++++ b/node_modules/@moodlehq/phonegap-plugin-push/src/ios/EncryptionHandler.m
+@@ -6,7 +6,16 @@
+ //
+ 
+ #import "EncryptionHandler.h"
++
++#if __has_include("DigiLearn-Swift.h")
++#import "DigiLearn-Swift.h"
++#elif __has_include("Moodle-Swift.h")
+ #import "Moodle-Swift.h"
++#elif __has_include("App-Swift.h")
++#import "App-Swift.h"
++#else
++#error "Generated Swift interface header not found."
++#endif
+ 
+ @implementation EncryptionHandler
+ 

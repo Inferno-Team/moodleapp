@@ -1,0 +1,12 @@
+diff --git a/node_modules/@moodlehq/cordova-plugin-advanced-http/src/ios/SDNetworkActivityIndicator/SDNetworkActivityIndicator.m b/node_modules/@moodlehq/cordova-plugin-advanced-http/src/ios/SDNetworkActivityIndicator/SDNetworkActivityIndicator.m
+index c917b9a..39cc14a 100644
+--- a/node_modules/@moodlehq/cordova-plugin-advanced-http/src/ios/SDNetworkActivityIndicator/SDNetworkActivityIndicator.m
++++ b/node_modules/@moodlehq/cordova-plugin-advanced-http/src/ios/SDNetworkActivityIndicator/SDNetworkActivityIndicator.m
+@@ -7,6 +7,7 @@
+  */
+ 
+ #import "SDNetworkActivityIndicator.h"
++#import <UIKit/UIKit.h>
+ 
+ @interface SDNetworkActivityIndicator()
+ {

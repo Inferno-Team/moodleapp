@@ -16,6 +16,9 @@ Purpose: capture the native debugging changes made while getting iOS/Android bui
 - `scripts/cordova-hooks/before_prepare_native_icons.js`
   - New hook that generates native icon sizes from `resources/icon.png` using `sips`.
   - Reason: force native icons to use the brand source icon instead of `www/assets/icon/icon.png`.
+- `scripts/cordova-hooks/sync_patched_cordova_plugins.js`
+  - New hook that copies patched iOS plugin sources from `node_modules/` into Cordova's ignored `plugins/` and `platforms/ios/App/Plugins/` copies.
+  - Reason: `patch-package` only updates `node_modules`, but Cordova builds from its own generated plugin directories.
 - `resources/android/appicon/*`
   - Generated Android launcher icons.
   - Reason: assets referenced by `config.xml`.
@@ -32,9 +35,21 @@ Purpose: capture the native debugging changes made while getting iOS/Android bui
 - `src/index.html`
   - Updated CSP to allow `digilearnfs:` instead of `moodleappfs:`.
   - Reason: the renamed app uses the `digilearnfs` local webview scheme.
+- `patches/@moodlehq+cordova-plugin-advanced-http+3.3.1-moodle.1.patch`
+  - Adds `UIKit` import to `SDNetworkActivityIndicator.m`.
+  - Reason: preserve the iOS compile fix for `UIApplication` symbols.
+- `patches/@moodlehq+cordova-plugin-file-transfer+2.0.0-moodle.2.patch`
+  - Adds `CDVFile.h` import and uses explicit `CDVFile` lookups for filesystem helpers.
+  - Reason: preserve the iOS compile fix for newer Cordova file APIs.
 - `patches/@moodlehq+cordova-plugin-ionic-webview+5.0.0-moodle.5.patch`
-  - Patch file that currently captures only the `localServerURL` normalization change.
-  - Reason: preserve part of the iOS webview fix across `npm install`.
+  - Captures both `localServerURL` normalization and the navigation-handler compatibility fix.
+  - Reason: preserve the full iOS white-screen fix across `npm install`.
+- `patches/@moodlehq+cordova-plugin-qrscanner+3.0.1-moodle.6.patch`
+  - Safely unwraps QR scan results and the callback command.
+  - Reason: preserve the Swift compile fix on the newer iOS toolchain.
+- `patches/@moodlehq+phonegap-plugin-push+4.0.0-moodle.13.patch`
+  - Uses conditional imports for generated Swift interface headers.
+  - Reason: preserve the iOS compile fix after the app rename.
 
 ## Ignored Dependency/Plugin Edits Created During This Debugging Work
 
@@ -65,16 +80,10 @@ Purpose: capture the native debugging changes made while getting iOS/Android bui
 ## Important Persistence Note
 
 - `plugins/`, `platforms/`, and `node_modules/` are ignored in this repository.
-- The edits listed above will not be preserved by a normal commit unless they are moved into one of:
-  - a `patch-package` patch under `patches/`
-  - a maintained plugin fork or vendored plugin source
-  - a Cordova hook that reapplies the edit after `plugin add` or `prepare`
-
-## Current Gap
-
-- The most important missing formalization is the white-screen fix in `@moodlehq/cordova-plugin-ionic-webview`.
-- The current patch file only has the URL-normalization part. It should be updated to also include the navigation-handler compatibility fix, otherwise a clean `npm install` can lose the real white-screen fix.
-- The other iOS plugin compile fixes also still exist only in ignored plugin copies.
+- The dependency/plugin edits are now preserved in `patches/`.
+- `postinstall` runs `patch-package` to reapply those diffs into `node_modules/`.
+- `scripts/cordova-hooks/sync_patched_cordova_plugins.js` copies the patched files into Cordova's ignored `plugins/` and `platforms/` build copies during `after_plugin_add` and `before_prepare`.
+- If the dependency versions change later, the patch files will need to be reviewed and updated.
 
 ## Other Tracked Changes Already Present In The Worktree
 
