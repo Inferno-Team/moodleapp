@@ -1,0 +1,42 @@
+diff --git a/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m b/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m
+index d5a64dcb4..68eaaf636 100644
+--- a/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m
++++ b/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m
+@@ -440,6 +440,15 @@ - (BOOL)shouldReloadWebView:(NSURL *)location title:(NSString*)title
+     return reload;
+ }
+ 
++- (NSURL *)localServerURL
++{
++    NSString *startURL = self.CDV_LOCAL_SERVER;
++    if (![startURL hasSuffix:@"/"]) {
++        startURL = [startURL stringByAppendingString:@"/"];
++    }
++
++    return [NSURL URLWithString:startURL];
++}
++
+ 
+ - (id)loadRequest:(NSURLRequest *)request
+ {
+@@ -447,9 +456,9 @@ - (id)loadRequest:(NSURLRequest *)request
+     if (request.URL.fileURL) {
+         NSURL* startURL = [NSURL URLWithString:((CDVViewController *)self.viewController).startPage];
+         NSString* startFilePath = [self.commandDelegate pathForResource:[startURL path]];
+-        NSURL *url = [[NSURL URLWithString:self.CDV_LOCAL_SERVER] URLByAppendingPathComponent:request.URL.path];
++        NSURL *url = [[self localServerURL] URLByAppendingPathComponent:request.URL.path];
+         if ([request.URL.path isEqualToString:startFilePath]) {
+-            url = [NSURL URLWithString:self.CDV_LOCAL_SERVER];
++            url = [self localServerURL];
+         }
+         if(request.URL.query) {
+             url = [NSURL URLWithString:[@"?" stringByAppendingString:request.URL.query] relativeToURL:url];
+@@ -809,7 +818,7 @@ -(void)setServerBasePath:(CDVInvokedUrlCommand*)command
+     self.basePath = path;
+     [self.handler setAssetPath:path];
+ 
+-    NSURLRequest * request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.CDV_LOCAL_SERVER]];
++    NSURLRequest * request = [NSURLRequest requestWithURL:[self localServerURL]];
+     [(WKWebView*)_engineWebView loadRequest:request];
+ }
+ 

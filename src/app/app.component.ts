@@ -42,6 +42,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     readonly outlet = viewChild.required(IonRouterOutlet);
 
     protected logger = CoreLogger.getInstance('AppComponent');
+    protected splashHidden = false;
+    protected splashHideTimeout?: number;
 
     /**
      * @inheritdoc
@@ -131,13 +133,45 @@ export class AppComponent implements OnInit, AfterViewInit {
     ngAfterViewInit(): void {
         this.logger.debug('App component initialized');
 
-        CoreSubscriptions.once(this.outlet().activateEvents, async () => {
-            await CorePlatform.ready();
+        const outlet = this.outlet();
 
-            this.logger.debug('Hide splash screen');
-            SplashScreen.hide();
-            this.setSystemUIColorsAfterSplash();
-        });
+        if (outlet.isActivated) {
+            void this.hideSplashScreen('router outlet already activated');
+
+            return;
+        }
+
+        CoreSubscriptions.once(outlet.activateEvents, () => void this.hideSplashScreen('router outlet activated'));
+
+        // On fast restores the router event can be missed, which leaves the splash visible forever.
+        this.splashHideTimeout = window.setTimeout(() => {
+            void this.hideSplashScreen('startup fallback timeout');
+        }, 3000);
+    }
+
+    /**
+     * Hide the splash screen once the application is ready.
+     *
+     * @param reason Reason why the splash is being hidden.
+     * @returns Promise resolved when done.
+     */
+    protected async hideSplashScreen(reason: string): Promise<void> {
+        if (this.splashHidden) {
+            return;
+        }
+
+        this.splashHidden = true;
+
+        if (this.splashHideTimeout !== undefined) {
+            clearTimeout(this.splashHideTimeout);
+            this.splashHideTimeout = undefined;
+        }
+
+        await CorePlatform.ready();
+
+        this.logger.debug(`Hide splash screen (${reason})`);
+        SplashScreen.hide();
+        void this.setSystemUIColorsAfterSplash();
     }
 
     /**
