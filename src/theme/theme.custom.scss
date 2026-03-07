@@ -1,7 +1,7 @@
 /*
  * App CUSTOM theme SCSS
  * ----------------------------------------------------------------------------
- * Place here custom styles.
+ * DigiLearn custom styles.
  */
 
 /*
@@ -9,7 +9,13 @@
  * -------------------------------------------
  */
 :root {
+    --core-header-toolbar-background: #36a887;
+    --core-header-toolbar-color: #ffffff;
+    --core-header-buttons-color: #ffffff;
 
+    --core-bottom-tabs-badge-color: #36a887;
+    --core-bottom-tabs-border-color-active: #36a887;
+    --core-tab-border-color-active: #36a887;
 }
 
 /*
@@ -17,5 +23,7 @@
  * -------------------------------------------
  */
 :root.dark {
-
+    --core-header-toolbar-background: #2d8e72;
+    --core-header-toolbar-color: #ffffff;
+    --core-header-buttons-color: #ffffff;
 }

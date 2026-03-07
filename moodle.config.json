@@ -1,6 +1,6 @@
 {
-    "app_id": "com.moodle.moodlemobile",
-    "appname": "Moodle Mobile",
+    "app_id": "com.digiworld.digilearn",
+    "appname": "DigiLearn",
     "versioncode": 52000,
     "versionname": "5.2.0",
     "cache_update_frequency_usually": 420000,
@@ -68,40 +68,34 @@
         "zh-tw": "正體中文"
     },
     "wsservice": "moodle_mobile_app",
-    "demo_sites": {
-        "student": {
-            "url": "https://school.moodledemo.net",
-            "username": "student",
-            "password": "moodle25"
-        },
-        "teacher": {
-            "url": "https://school.moodledemo.net",
-            "username": "teacher",
-            "password": "moodle25"
-        }
-    },
+    "demo_sites": {},
     "defaultZoomLevel": "none",
     "zoomlevels": {
         "none": 100,
         "medium": 110,
         "high": 120
     },
-    "customurlscheme": "moodlemobile",
-    "sites": [],
+    "customurlscheme": "digilearn",
+    "sites": [
+        {
+            "url": "https://learn.digiworld-dev.com",
+            "name": "DigiLearn"
+        }
+    ],
     "multisitesdisplay": "",
     "sitefindersettings": {},
-    "onlyallowlistedsites": false,
+    "onlyallowlistedsites": true,
     "forcedefaultlanguage": false,
-    "privacypolicy": "https://moodle.net/moodle-app-privacy/",
-    "notificoncolor": "#f98012",
+    "privacypolicy": "https://digiworld-dev.com/privacy",
+    "notificoncolor": "#36a887",
     "enableanalytics": false,
     "forceColorScheme": "",
     "forceLoginLogo": false,
     "showTopLogo": "hidden",
-    "ioswebviewscheme": "moodleappfs",
+    "ioswebviewscheme": "digilearnfs",
     "appstores": {
-        "android": "com.moodle.moodlemobile",
-        "ios": "id633359593"
+        "android": "com.digiworld.digilearn",
+        "ios": "id000000000"
     },
     "wsrequestqueuelimit": 10,
     "wsrequestqueuedelay": 100,

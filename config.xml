@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="52000" id="com.moodle.moodlemobile" ios-CFBundleVersion="5.2.0.0" version="5.2.0" versionCode="52000" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Moodle</name>
-    <description>Moodle official app</description>
-    <author email="mobile@moodle.com" href="http://moodle.com">Moodle Mobile team</author>
+<widget android-versionCode="52000" id="com.digiworld.digilearn" ios-CFBundleVersion="5.2.0.0" version="5.2.0" versionCode="52000" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>DigiLearn</name>
+    <description>DigiLearn – Your smart gateway to online learning, powered by Digiworld.</description>
+    <author email="info@digiworld-dev.com" href="https://digiworld-dev.com">Digiworld Developers</author>
     <content src="index.html" />
     <access origin="*" />
     <access launch-external="yes" origin="tel:*" />
     <access launch-external="yes" origin="mailto:*" />
     <access launch-external="yes" origin="geo:*" />
-    <allow-navigation href="moodleappfs:*" />
+    <allow-navigation href="digilearnfs:*" />
     <allow-navigation href="cdvfile:*" />
     <allow-navigation href="content:*" />
     <allow-navigation href="data:*" />
@@ -19,6 +19,7 @@
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
     <hook src="scripts/cordova-hooks/before_plugin_add.sh" type="before_plugin_add" />
+    <hook src="scripts/cordova-hooks/after_prepare_ios_swift_version.js" type="after_prepare" />
     <preference name="permissions" value="none" />
     <preference name="orientation" value="default" />
     <preference name="target-device" value="universal" />
@@ -28,7 +29,7 @@
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="prerendered-icon" value="true" />
-    <preference name="AppendUserAgent" value="MoodleMobile 5.2.0 (52000)" />
+    <preference name="AppendUserAgent" value="DigiLearn 5.2.0 (52000)" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="ScrollEnabled" value="true" />
     <preference name="KeyboardDisplayRequiresUserAction" value="false" />
@@ -45,7 +46,7 @@
     <preference name="CustomURLSchemePluginClearsAndroidIntent" value="true" />
     <preference name="deployment-target" value="15.0" />
     <preference name="iosPersistentFileLocation" value="Compatibility" />
-    <preference name="iosScheme" value="moodleappfs" />
+    <preference name="iosScheme" value="digilearnfs" />
     <preference name="WKWebViewOnly" value="true" />
     <preference name="WKFullScreenEnabled" value="true" />
     <preference name="AndroidXEnabled" value="true" />
@@ -53,16 +54,16 @@
     <preference name="GradlePluginGoogleServicesVersion" value="4.4.2" />
     <preference name="GradlePluginKotlinVersion" value="1.9.24" />
     <preference name="StatusBarOverlaysWebView" value="false" />
-    <preference name="StatusBarBackgroundColor" value="#FFFFFF" />
-    <preference name="NavigationBarBackgroundColor" value="#FFFFFF" />
+    <preference name="StatusBarBackgroundColor" value="#36a887" />
+    <preference name="NavigationBarBackgroundColor" value="#36a887" />
     <preference name="AndroidEdgeToEdge" value="true" />
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
     </feature>
     <platform name="android">
         <preference name="AndroidWindowSplashScreenAnimatedIcon" value="resources/android/android-splash.xml" />
-        <preference name="AndroidWindowSplashScreenBackground" value="#FFFFFF" />
-        <preference name="AndroidWindowSplashScreenIconBackgroundColor" value="#FFFFFF" />
+        <preference name="AndroidWindowSplashScreenBackground" value="#36a887" />
+        <preference name="AndroidWindowSplashScreenIconBackgroundColor" value="#36a887" />
         <resource-file src="google-services.json" target="app/google-services.json" />
         <resource-file src="resources/android/icon/drawable-ldpi-smallicon.png" target="app/src/main/res/mipmap-ldpi/smallicon.png" />
         <resource-file src="resources/android/icon/drawable-mdpi-smallicon.png" target="app/src/main/res/mipmap-mdpi/smallicon.png" />
@@ -84,6 +85,7 @@
         </config-file>
     </platform>
     <platform name="ios">
+        <preference name="UseSwiftLanguageVersion" value="5.0" />
         <resource-file src="GoogleService-Info.plist" />
         <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
             <string>We need camera access to take pictures so you can use them for changing your profile picture, attach them in your tasks submission and share them with the teachers.</string>
