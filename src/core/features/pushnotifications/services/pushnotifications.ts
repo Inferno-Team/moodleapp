@@ -616,6 +616,11 @@ export class CorePushNotificationsProvider {
                 // Execute the callback in the Angular zone, so change detection doesn't stop working.
                 NgZone.run(() => {
                     this.pushID = data.registrationId;
+
+                    if (CoreConstants.isDevOrTestingBuild()) {
+                        this.logger.log(`FCM token generated: ${this.pushID}`);
+                    }
+
                     if (!CoreSites.isLoggedIn() || !this.canRegisterOnMoodle()) {
                         return;
                     }

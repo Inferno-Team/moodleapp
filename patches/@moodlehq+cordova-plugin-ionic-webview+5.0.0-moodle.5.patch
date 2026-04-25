@@ -1,5 +1,5 @@
 diff --git a/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m b/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m
-index f46cc80..d5f3b25 100644
+index ff6bf5526..95c9dd973 100644
 --- a/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m
 +++ b/node_modules/@moodlehq/cordova-plugin-ionic-webview/src/ios/CDVWKWebViewEngine.m
 @@ -440,14 +440,25 @@ - (BOOL)shouldReloadWebView:(NSURL *)location title:(NSString*)title
@@ -36,6 +36,8 @@ index f46cc80..d5f3b25 100644
      CDVViewController* vc = (CDVViewController*)self.viewController;
 +    int navType = (int)navigationAction.navigationType;
 +#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140500
++    NSMutableDictionary *info = [NSMutableDictionary dictionary];
++#else
 +    NSDictionary *info = @{};
 +#endif
 +
@@ -50,40 +52,46 @@ index f46cc80..d5f3b25 100644
 +
 +#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 140500
 +    if (@available(iOS 14.5, *)) {
-+        info = @{
-+            @"shouldPerformDownload": @(navigationAction.shouldPerformDownload),
-+        };
++        info[@"shouldPerformDownload"] = [NSNumber numberWithBool:navigationAction.shouldPerformDownload];
 +    }
 +#endif
  
      /*
       * Give plugins the chance to handle the url
-@@ -749,9 +781,22 @@ - (void) webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigat
-     BOOL shouldAllowRequest = NO;
+@@ -750,19 +782,21 @@ - (void) webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigat
  
-     for (CDVPlugin *plugin in vc.enumerablePlugins) {
--        if ([plugin respondsToSelector:@selector(shouldOverrideLoadWithRequest:navigationType:)]) {
+     for (NSString* pluginName in vc.pluginObjects) {
+         CDVPlugin* plugin = [vc.pluginObjects objectForKey:pluginName];
+-        SEL selector = NSSelectorFromString(@"shouldOverrideLoadWithRequest:navigationType:");
+-        if ([plugin respondsToSelector:selector]) {
 +        if ([plugin respondsToSelector:@selector(shouldOverrideLoadWithRequest:navigationType:info:)] ||
 +                [plugin respondsToSelector:@selector(shouldOverrideLoadWithRequest:navigationType:)]) {
++            CDVPlugin <CDVPluginNavigationHandler> *navPlugin = (CDVPlugin <CDVPluginNavigationHandler> *)plugin;
              anyPluginsResponded = YES;
--            shouldAllowRequest = [plugin shouldOverrideLoadWithRequest:navigationAction.request navigationType:(int)navigationAction.navigationType];
+-            // https://issues.apache.org/jira/browse/CB-12497
+-            int navType = (int)navigationAction.navigationType;
+-            if (WKNavigationTypeOther == navigationAction.navigationType) {
+-                #ifdef __CORDOVA_6_0_0
+-                    navType = -1;
+-                #else
+-                    navType = 5;
+-                #endif
 +
-+            if ([plugin respondsToSelector:@selector(shouldOverrideLoadWithRequest:navigationType:info:)]) {
-+                CDVPlugin<CDVPluginNavigationHandler> *navPlugin = (CDVPlugin<CDVPluginNavigationHandler> *)plugin;
++            if ([navPlugin respondsToSelector:@selector(shouldOverrideLoadWithRequest:navigationType:info:)]) {
 +                shouldAllowRequest = [navPlugin shouldOverrideLoadWithRequest:navigationAction.request
 +                    navigationType:navType
 +                    info:info];
 +            } else {
 +#pragma clang diagnostic push
 +#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-+                SEL selector = NSSelectorFromString(@"shouldOverrideLoadWithRequest:navigationType:");
-+                shouldAllowRequest = (((BOOL (*)(id, SEL, id, int))objc_msgSend)(plugin, selector, navigationAction.request, navType));
++                shouldAllowRequest = [navPlugin shouldOverrideLoadWithRequest:navigationAction.request navigationType:navType];
 +#pragma clang diagnostic pop
-+            }
- 
+             }
+-            shouldAllowRequest = (((BOOL (*)(id, SEL, id, int))objc_msgSend)(plugin, selector, navigationAction.request, navType));
              if (!shouldAllowRequest) {
                  break;
-@@ -797,7 +842,7 @@ -(void)setServerBasePath:(CDVInvokedUrlCommand*)command
+             }
+@@ -807,7 +841,7 @@ -(void)setServerBasePath:(CDVInvokedUrlCommand*)command
      self.basePath = path;
      [self.handler setAssetPath:path];
  

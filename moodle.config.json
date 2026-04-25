@@ -1,6 +1,6 @@
 {
-    "app_id": "com.digiworld.digilearn",
-    "appname": "DigiLearn",
+    "app_id": "com.digiworld.topleaders",
+    "appname": "TOP LEADERS",
     "versioncode": 52000,
     "versionname": "5.2.0",
     "cache_update_frequency_usually": 420000,
@@ -75,11 +75,11 @@
         "medium": 110,
         "high": 120
     },
-    "customurlscheme": "digilearn",
+    "customurlscheme": "topleaders",
     "sites": [
         {
-            "url": "https://learn.digiworld-dev.com",
-            "name": "DigiLearn"
+            "url": "https://lms.topleaderscentre.com/",
+            "name": "TOP LEADERS"
         }
     ],
     "multisitesdisplay": "",
@@ -92,9 +92,9 @@
     "forceColorScheme": "",
     "forceLoginLogo": false,
     "showTopLogo": "hidden",
-    "ioswebviewscheme": "digilearnfs",
+    "ioswebviewscheme": "topleadersfs",
     "appstores": {
-        "android": "com.digiworld.digilearn",
+        "android": "com.digiworld.topleaders",
         "ios": "id000000000"
     },
     "wsrequestqueuelimit": 10,

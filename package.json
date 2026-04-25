@@ -1,7 +1,7 @@
 {
-    "name": "digilearn",
+    "name": "topleaders",
     "version": "5.2.0",
-    "description": "DigiLearn – Your smart gateway to online learning, powered by Digiworld.",
+    "description": "TOP LEADERS mobile learning app.",
     "author": {
         "name": "Digiworld Developers",
         "email": "info@digiworld-dev.com"
@@ -27,9 +27,12 @@
         "dev:android": "concurrently \"npm run dev:android:app\" \"npm run dev:android:cordova\"",
         "dev:android:app": "ionic cordova run android --livereload --external --ssl",
         "dev:android:cordova": "npm run dev --prefix cordova-plugin-moodleapp",
-        "dev:ios": "ionic cordova run ios",
+        "android:keystore": "./scripts/ensure-android-keystore.sh",
+        "build:android:apk:signed": "./scripts/build-android-release.sh apk",
+        "build:android:aab:signed": "./scripts/build-android-release.sh aab",
+        "dev:ios": "ionic cordova build ios && ./scripts/run-built-ios-app.sh",
         "prod:android": "npm run prod --prefix cordova-plugin-moodleapp && NODE_ENV=production ionic cordova run android --prod",
-        "prod:ios": "NODE_ENV=production ionic cordova run ios --prod",
+        "prod:ios": "NODE_ENV=production ionic cordova build ios --prod && ./scripts/run-built-ios-app.sh",
         "test": "NODE_ENV=testing gulp && jest --verbose",
         "test:ci": "NODE_ENV=testing gulp && jest -ci --runInBand --verbose",
         "test:watch": "NODE_ENV=testing gulp watch & jest --watch",
@@ -181,7 +184,8 @@
     },
     "cordova": {
         "platforms": [
-            "ios"
+            "ios",
+            "android"
         ],
         "plugins": {
             "@moodlehq/cordova-plugin-advanced-http": {
@@ -211,7 +215,7 @@
             "cordova-plugin-badge": {},
             "cordova-plugin-chooser": {},
             "cordova-plugin-customurlscheme": {
-                "URL_SCHEME": "digilearn",
+                "URL_SCHEME": "topleaders",
                 "ANDROID_SCHEME": " ",
                 "ANDROID_HOST": " ",
                 "ANDROID_PATHPREFIX": "/"

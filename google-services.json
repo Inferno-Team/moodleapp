@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "981022381711",
-    "project_id": "digilearn-aef15",
-    "storage_bucket": "digilearn-aef15.firebasestorage.app"
+    "project_number": "2552744254",
+    "project_id": "top-leaders-43e74",
+    "storage_bucket": "top-leaders-43e74.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:981022381711:android:cb5410d2181c264c7d82fa",
+        "mobilesdk_app_id": "1:2552744254:android:bd5abf70cff6623a65046f",
         "android_client_info": {
-          "package_name": "com.digiworld.digilearn"
+          "package_name": "com.digiworld.topleaders"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAR9DQl3llmlKJryVhmUGcu82ufjywz4UU"
+          "current_key": "AIzaSyAuGLcQMdhOe_54ewAGlhi6hdm5S0N3PtQ"
         }
       ],
       "services": {
