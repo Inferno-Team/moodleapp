@@ -3,7 +3,7 @@
     <name>TOP LEADERS</name>
     <description>TOP LEADERS mobile learning app.</description>
     <author email="info@digiworld-dev.com" href="https://digiworld-dev.com">Digiworld Developers</author>
-    <content original-src="index.html" src="https://0.0.0.0:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <access launch-external="yes" origin="tel:*" />
     <access launch-external="yes" origin="mailto:*" />
@@ -537,5 +537,4 @@
             </array>
         </config-file>
     </platform>
-    <allow-navigation href="https://0.0.0.0:8100" sessionid="e6b6bcff" />
 </widget>
