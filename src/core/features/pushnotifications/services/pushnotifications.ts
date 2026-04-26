@@ -616,6 +616,11 @@ export class CorePushNotificationsProvider {
                 // Execute the callback in the Angular zone, so change detection doesn't stop working.
                 NgZone.run(() => {
                     this.pushID = data.registrationId;
+
+                    if (CoreConstants.isDevOrTestingBuild()) {
+                        this.logger.log(`FCM token generated: ${this.pushID}`);
+                    }
+
                     if (!CoreSites.isLoggedIn() || !this.canRegisterOnMoodle()) {
                         return;
                     }
@@ -650,6 +655,12 @@ export class CorePushNotificationsProvider {
         this.logger.debug('Register device on Moodle.');
 
         if (!this.canRegisterOnMoodle()) {
+            if (CoreConstants.isDevOrTestingBuild()) {
+                this.logger.warn(
+                    `Cannot register device on Moodle (pushID set: ${!!this.pushID}, mobile platform: ${CorePlatform.isMobile()})`,
+                );
+            }
+
             return Promise.reject(null);
         }
 
@@ -659,6 +670,10 @@ export class CorePushNotificationsProvider {
 
             const data = this.getRequiredRegisterData();
             data.publickey = await this.getPublicKeyForSite(site);
+
+            if (CoreConstants.isDevOrTestingBuild()) {
+                this.logger.log(`Using FCM token for Moodle registration: ${data.pushid}`);
+            }
 
             const neededActions = await this.getRegisterDeviceActions(data, site, forceUnregister);
 

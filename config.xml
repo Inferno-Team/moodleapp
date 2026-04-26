@@ -94,21 +94,21 @@
         </config-file>
     </platform>
     <platform name="ios">
-        <icon src="resources/ios/appicon/icon-40.png" width="40" height="40" />
-        <icon src="resources/ios/appicon/icon-60.png" width="60" height="60" />
-        <icon src="resources/ios/appicon/icon-58.png" width="58" height="58" />
-        <icon src="resources/ios/appicon/icon-87.png" width="87" height="87" />
-        <icon src="resources/ios/appicon/icon-76.png" width="76" height="76" />
-        <icon src="resources/ios/appicon/icon-114.png" width="114" height="114" />
-        <icon src="resources/ios/appicon/icon-80.png" target="spotlight" width="80" height="80" />
-        <icon src="resources/ios/appicon/icon-120.png" target="spotlight" width="120" height="120" />
-        <icon src="resources/ios/appicon/icon-120.png" width="120" height="120" />
-        <icon src="resources/ios/appicon/icon-180.png" width="180" height="180" />
-        <icon src="resources/ios/appicon/icon-128.png" width="128" height="128" />
-        <icon src="resources/ios/appicon/icon-192.png" width="192" height="192" />
-        <icon src="resources/ios/appicon/icon-136.png" width="136" height="136" />
-        <icon src="resources/ios/appicon/icon-152.png" width="152" height="152" />
-        <icon src="resources/ios/appicon/icon-167.png" width="167" height="167" />
+        <icon height="40" src="resources/ios/appicon/icon-40.png" width="40" />
+        <icon height="60" src="resources/ios/appicon/icon-60.png" width="60" />
+        <icon height="58" src="resources/ios/appicon/icon-58.png" width="58" />
+        <icon height="87" src="resources/ios/appicon/icon-87.png" width="87" />
+        <icon height="76" src="resources/ios/appicon/icon-76.png" width="76" />
+        <icon height="114" src="resources/ios/appicon/icon-114.png" width="114" />
+        <icon height="80" src="resources/ios/appicon/icon-80.png" target="spotlight" width="80" />
+        <icon height="120" src="resources/ios/appicon/icon-120.png" target="spotlight" width="120" />
+        <icon height="120" src="resources/ios/appicon/icon-120.png" width="120" />
+        <icon height="180" src="resources/ios/appicon/icon-180.png" width="180" />
+        <icon height="128" src="resources/ios/appicon/icon-128.png" width="128" />
+        <icon height="192" src="resources/ios/appicon/icon-192.png" width="192" />
+        <icon height="136" src="resources/ios/appicon/icon-136.png" width="136" />
+        <icon height="152" src="resources/ios/appicon/icon-152.png" width="152" />
+        <icon height="167" src="resources/ios/appicon/icon-167.png" width="167" />
         <icon src="resources/ios/appicon/icon-1024.png" />
         <preference name="UseSwiftLanguageVersion" value="5.0" />
         <resource-file src="GoogleService-Info.plist" />
